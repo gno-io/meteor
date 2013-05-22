@@ -677,7 +677,7 @@ Fiber(function () {
             process.exit(1);
           }
 
-          var mongo_url = "mongodb://127.0.0.1:" + mongod_port + "/meteor";
+          var mongo_url = "mongodb://"+process.env.IP+":" + mongod_port + "/meteor";
 
           if (new_argv.url)
             console.log(mongo_url);
