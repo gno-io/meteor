@@ -582,7 +582,7 @@ exports.getSettings = function (filename) {
 // context is as created in meteor.js.
 // options include: port, minify, once, settingsFile, testPackages
 exports.run = function (context, options) {
-  var outer_port = port || process.env.PORT;
+  var outer_port = options.port || process.env.PORT;
   var inner_port = 16010;
   var mongo_port = 16000;
   var test_port = 16011;
