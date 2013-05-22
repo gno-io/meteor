@@ -582,13 +582,15 @@ exports.getSettings = function (filename) {
 // context is as created in meteor.js.
 // options include: port, minify, once, settingsFile, testPackages
 exports.run = function (context, options) {
-  var outer_port = options.port || 3000;
-  var inner_port = outer_port + 1;
-  var mongo_port = outer_port + 2;
+  var outer_port = port || process.env.PORT;
+  var inner_port = 16010;
+  var mongo_port = 16000;
+  var test_port = 16011;
   var bundle_path = path.join(context.appDir, '.meteor', 'local', 'build');
   // Allow override and use of external mongo. Matches code in launch_mongo.
   var mongo_url = process.env.MONGO_URL ||
-        ("mongodb://"+process.env.IP+":" + mongod_port + "/meteor");
+        ("mongodb://" + process.env.IP + ":" + mongo_port + "/meteor");
+  var test_mongo_url = "mongodb://"+process.env.IP+":" + mongo_port + "/meteor_test";
   var firstRun = true;
 
   var deps_info = null;
@@ -733,7 +735,7 @@ exports.run = function (context, options) {
     Status.running = true;
 
     if (firstRun) {
-      process.stdout.write("=> Meteor server running on: http://localhost:" + outer_port + "/\n");
+      process.stdout.write("Running on: http://"+process.env.IP+":" + outer_port + "/\n");
       firstRun = false;
       lastThingThatPrintedWasRestartMessage = false;
     } else {
