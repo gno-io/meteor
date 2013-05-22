@@ -125,14 +125,14 @@ var start_proxy = function (outer_port, inner_port, callback) {
     } else if (Status.listening) {
       // server is listening. things are hunky dory!
       proxy.proxyRequest(req, res, {
-        host: '127.0.0.1', port: inner_port
+        host: process.env.IP, port: inner_port
       });
     } else {
       // Not listening yet. Queue up request.
       var buffer = httpProxy.buffer(req);
       request_queue.push(function () {
         proxy.proxyRequest(req, res, {
-          host: '127.0.0.1', port: inner_port,
+          host: process.env.IP, port: inner_port,
           buffer: buffer
         });
       });
@@ -144,14 +144,14 @@ var start_proxy = function (outer_port, inner_port, callback) {
     if (Status.listening) {
       // server is listening. things are hunky dory!
       p.proxy.proxyWebSocketRequest(req, socket, head, {
-        host: '127.0.0.1', port: inner_port
+        host: process.env.IP, port: inner_port
       });
     } else {
       // Not listening yet. Queue up request.
       var buffer = httpProxy.buffer(req);
       request_queue.push(function () {
         p.proxy.proxyWebSocketRequest(req, socket, head, {
-          host: '127.0.0.1', port: inner_port,
+          host: process.env.IP, port: inner_port,
           buffer: buffer
         });
       });
@@ -183,7 +183,7 @@ var start_proxy = function (outer_port, inner_port, callback) {
     res.end('Unexpected error.');
   });
 
-  p.listen(outer_port, callback);
+  p.listen(outer_port, process.env.IP, callback);
 };
 
 ////////// MongoDB //////////
@@ -588,7 +588,7 @@ exports.run = function (context, options) {
   var bundle_path = path.join(context.appDir, '.meteor', 'local', 'build');
   // Allow override and use of external mongo. Matches code in launch_mongo.
   var mongo_url = process.env.MONGO_URL ||
-        ("mongodb://127.0.0.1:" + mongo_port + "/meteor");
+        ("mongodb://"+process.env.IP+":" + mongod_port + "/meteor");
   var firstRun = true;
 
   var deps_info = null;
